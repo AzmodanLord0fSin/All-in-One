@@ -1,0 +1,414 @@
+[void] [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing") 
+[void] [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") 
+Add-Type -AssemblyName System.Drawing
+
+function New-GUIWindow {
+    param (
+     [string]$Name="Fenster",
+     [int]$X=100,
+     [int]$Y=200,
+     [int]$Width=1000,
+     [int]$Height=350,
+     [string]$Title=$Name  
+    )
+    $Window = New-Object System.Windows.Forms.Form
+    $Window.BackgroundImageLayout = "None"
+    $Window.Font = "Callibri,10"
+    $Window.Text = $Title
+    
+   #$WindowImg = [system.drawing.image]::FromFile("C:\Kraftmuschel\blau.jpg") #Ordner ändern
+   $Window.BackgroundImage = $WindowImg
+   $Window.BackgroundImageLayout = "None"
+   $Window.Width = $WindowImg.Width
+   $Window.Height = $WindowImg.Height
+   
+    $Window.Name = $Name
+    $Window.Location = New-Object System.Drawing.Point($X,$Y)
+    $Window.Size = New-Object System.Drawing.Size($Width,$Height)
+    $Window.TopMost=$true
+    return $Window}
+
+
+    function Show-GUIWindow {
+        $Fenster.Add_Shown({$Fenster.Activate()})
+        [void] $Fenster.ShowDialog() }
+
+
+        
+function New-GUIButton {
+    param (
+     [System.Windows.Forms.Form]$Window,
+     [string]$Name="Knopf",
+     [string]$Content="Knopf",
+     [int]$X=300,
+     [int]$Y=200,
+     [int]$Width=75,
+     [int]$Height=23,
+     [Scriptblock]$Action
+    )
+    $Button = New-Object System.Windows.Forms.Button
+    $Button.Location = New-Object System.Drawing.Size($X,$Y)
+    $Button.Size = New-Object System.Drawing.Size($Width,$Height)
+    $Button.Name = $Name
+    $Button.Text = $Content
+    if ($Action) {
+     $Button.Add_Click($Action)
+    }
+    $Button.Add_Click({$this.Tag="Clicked"})
+    $Window.Controls.Add($Button)
+   }
+
+   function checkbox1 
+{
+[void] [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms")
+[void] [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing")
+
+$checkbox1.Add_CheckStateChanged({
+    $OKButton.Enabled = $checkbox1.Checked })
+ 
+    
+    $Form.Add_Shown({$Form.Activate()})
+    [void] $Form.ShowDialog() 
+
+  checkbox_test
+}
+
+function checkbox2 
+{
+[void] [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms")
+[void] [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing")
+
+$checkbox2.Add_CheckStateChanged({
+    $OKButton.Enabled = $checkbox2.Checked })
+ 
+    
+    $Form.Add_Shown({$Form.Activate()})
+    [void] $Form.ShowDialog() 
+
+  checkbox_test
+}
+
+function New-GUITextBox {
+    param (
+     [System.Windows.Forms.Form]$Window,  
+     [string]$Name="Textfeld",
+     [string]$Content="Textfeld",
+     [int]$X=10,
+     [int]$Y=20,
+     [int]$Width=280,
+     [int]$Height=20
+    )
+    $Text = New-Object System.Windows.Forms.Label
+    $Text.Location = New-Object System.Drawing.Point($X,$Y)
+    $Text.Size = New-Object System.Drawing.Size($Width,$Height) 
+    $Text.Name = $Namel
+    $Text.Text = $Content
+    $Window.Controls.Add($Text)
+   }
+ 
+   function Combobox { 
+    param (
+     [System.Windows.Forms.Form]$Window,   
+     [string]$Name="Textfeld",
+     [string]$Content="Textfeld",
+     [int]$X=10,
+     [int]$Y=20,
+     [int]$Width=280,
+     [int]$Height=20
+     # [Array]$liste=@("EMEA\sgeise","EMEA\tknoblo","EMEA\jmikote","EMEA\martlut")  
+     )
+    $Cbox = New-Object System.Windows.Forms.Comboboxl
+    $Cbox.Location = New-Object System.Drawing.Point($X,$Y)
+    $Cbox.Size = New-Object System.Drawing.Size($Width,$Height) 
+    $Cbox.Name = $Name
+    $Cbox.Text = $Content
+    foreach($eintrag in $liste)
+   {
+     $cbox.Items.add($eintrag) | Out-NULL
+   }
+    $Window.Controls.Add($Cbox)
+   }
+
+[void] [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing") 
+[void] [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") 
+
+$Fenster = New-Object System.Windows.Forms.Form 
+$Fenster.Text = "LuG Image"
+$Fenster.Size = New-Object System.Drawing.Size(300,200) 
+$Fenster.StartPosition = "CenterScreen"
+
+
+$objLabel = New-Object System.Windows.Forms.Label
+$objLabel.Location = New-Object System.Drawing.Size(10,20) 
+$objLabel.Size = New-Object System.Drawing.Size(280,20) 
+$objLabel.Text = "$LGImage"
+$objForm.Controls.Add($objLabel) 
+
+else { 
+$TextFeld = New-Object System.Windows.Forms.MaskedTextBox
+$TextFeld.PasswordChar = '#'
+$TextFeld.Location = New-Object System.Drawing.Size (150, 50)
+$TextFeld.Size = New-Object System.Drawing.Size (200, 23)
+$TextFeld.Visible = $True
+$Fenster.Controls.Add($TextFeld) 
+
+}
+
+
+$OKButton = New-Object System.Windows.Forms.Button
+$OKButton.Location = New-Object System.Drawing.Size(75,120)
+$OKButton.Size = New-Object System.Drawing.Size(75,23)
+$OKButton.Text = "OK"
+$OKButton.Add_Click({$x=$objTextBox.Text;$objForm.Close()})
+$objForm.Controls.Add($OKButton)
+
+
+function RDP
+ {
+if ((Get-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server').fDenyTSConnections -eq 1)
+          {[System.Windows.Forms.MessageBox]::Show("RDP inaktiv :-(",“RDP-Info “,0)}
+
+ elseif ((Get-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp').UserAuthentication -eq 1)
+         {[System.Windows.Forms.MessageBox]::Show("Only Secure Connections allowed",“RDP-Info “,0)} 
+
+ else     {[System.Windows.Forms.MessageBox]::Show("RDP aktiv!",“RDP-Info “,0)}
+} 
+
+
+function autologon {$Autologon = Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\" | Select-Object -ExpandProperty AutoAdminLogon
+                    $AutoUserName = Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\" | Select-Object -ExpandProperty DefaultUserName
+                    $Password = Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\" | Select-Object -ExpandProperty DefaultPassword # Muss ich leider draussen lassen
+
+                    [System.Windows.Forms.MessageBox]::Show("AutoAdminLogon: $Autologon" + [System.Environment]::NewLine + "AutoLogonUser: $AutoUserName",“Info“,0)}  #$Password - muss leider draussen bleiben
+
+                    function SS144
+                    {       
+
+                    Start-Process "Pfad_zu_Programm"                                                      
+                    
+                    }
+
+                    function SS140
+     {
+
+     
+    Start-Process "Pfad_zu_Programm"                                                          
+     
+    }
+
+function NetUse
+    {
+     
+     Start-Process "Pfad_zu_Programm"      
+    }
+
+    
+function isi
+    {
+     
+     Start-Process "Pfad_zu_Programm"     
+    }   
+    
+    
+function ie   
+    {
+    Start-Process "https://google.de"    
+    }
+
+    
+function vnc
+     {
+     
+     Start-Process "Pfad_zu_Programm"
+     }
+
+
+function notepad
+     {
+     
+        Start-Process "$env:WINDIR\System32\notepad.exe"
+    
+    }
+
+    function TimeSetting
+     {
+       
+      regedit /s " <<<<< lokale Datei >>>>> "
+    
+    }
+
+    function ConnectNetzLW
+    {
+       $IDRUser=$CBox1.text 
+      
+    Net Use y: \\NETZLAUFWERKPFAD /user:$IDRUser $PWText.Text
+    
+    }
+
+    function cc32
+    {
+    
+    Start-Process "C:\BEISPIELPFAD\ccsetup528\CCleaner.exe"
+    }
+
+
+    #Ok Button um NetzlaufwerkL zu bestätigen
+$Domain = $checkbox.Checked
+if ($Domain -eq $True) {$Domain1 = "OK"} else {$Domain1 = ""}
+
+function SecurePW
+
+{
+$PWEingabe = $PWText |  ConvertTo-SecureString -AsPlainText -Force
+$PWStr = = ([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($PWStr));
+
+$PWAus = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($PWStr);
+
+}
+
+function DC64
+        
+    {
+    Start-Process "\\BEISPIELPFAD\DeviceCleanup.exe"
+
+    }
+
+function DC32
+
+    {
+    Start-Process "\\BEISPIELPFAD\DeviceCleanup.exe"
+    
+    }
+
+    
+function PCInfo
+{
+#win7-en
+if (test-path "BEISPIELPFAD\BG-Info_LuG.bgi") {$infofile = "BEISPIELPFAD\\PC-Info.txt"} else {}
+#win7-de
+if (test-path "BEISPIELPFAD\BG-Info_LuG.bgi") {$infofile = "BEISPIELPFAD\PC-Info.txt"} else {}
+#winxp-en
+if (test-path "BEISPIELPFAD\BG-Info_LuG.bgi") {$infofile = "BEISPIELPFAD\PC-Info.txt"} else {}
+#winxp-de
+if (test-path "BEISPIELPFAD\BG-Info_LuG.bgi") {$infofile = "BEISPIELPFAD\PC-Info.txt"} else {}
+
+if (Test-Path $infofile) {Remove-Item $infofile -Force} else {}
+
+$lz = ""
+
+$cs = "Rechnername:      "+(get-wmiobject win32_computersystem).name
+    $cs | Out-File $infofile -Append
+    $cs = "Computerbeschreibung:   "+(get-wmiobject win32_operatingsystem).Description
+    $cs | Out-File $infofile -Append
+    $lz | Out-File $infofile -Append
+    $cs = "Betriebssystem:   "+(get-wmiobject win32_operatingsystem).caption
+    $cs | Out-File $infofile -Append
+    $cs = "ServicePack:      "+(get-wmiobject win32_operatingsystem).CSDVersion
+    $cs | Out-File $infofile -Append
+    $cs = "Architektur:      "+(get-wmiobject win32_operatingsystem).OSArchitecture
+    $cs | Out-File $infofile -Append
+    $lz | Out-File $infofile -Append
+    $cs = "Domain:      "+(get-wmiobject win32_computersystem).domain
+    $cs | Out-File $infofile -Append
+    $lz | Out-File $infofile -Append
+    $cs = "Sophos:" | Out-File $infofile -Append
+
+    if (Test-Path "C:\Program Files\Sophos\Sophos Anti-Virus\SavMain.exe") {
+    $cs = "Sophos (x86):      "+(get-item "C:\Program Files\Sophos\Sophos Anti-Virus\SavMain.exe").VersionInfo.ProductVersion
+    $cs | Out-File $infofile -Append} else {}
+    if (Test-Path "C:\Program Files (x86)\Sophos\Sophos Anti-Virus\SavMain.exe") {
+    $cs = "Sophos (x64):      "+(get-item "C:\Program Files (x86)\Sophos\Sophos Anti-Virus\SavMain.exe").VersionInfo.ProductVersion
+    $cs | Out-File $infofile -Append} else {}
+
+    $lz | Out-File $infofile -Append
+
+    if (Test-Path "C:\Program Files\RealVNC\VNC4\winvnc4.exe") {
+    $cs = "VNC:" | Out-File $infofile -Append
+    $cs = "VNC-Version:      "+(get-item "C:\Program Files\RealVNC\VNC4\winvnc4.exe").VersionInfo.ProductVersion} else {$cs = "VNC-Version:      nicht installiert/falscher Pfad"}
+
+    $cs | Out-File $infofile -Append
+
+    $lz | Out-File $infofile -Append
+    $cs = "Netzwerk:" | Out-File $infofile -Append
+    $cs = "---------" | Out-File $infofile -Append
+    $cs = Get-WmiObject Win32_NetworkAdapterConfiguration | select Index, Description, MACAddress, DHCPEnabled, IPAddress
+    $cs | Out-File $infofile -Append
+
+    [System.Windows.Forms.MessageBox]::Show("PCInfo in Datei geschrieben unter $infofile",“PCInfo: “,0)
+    Start-Process "$env:WINDIR\System32\notepad.exe" $infofile
+    }
+
+    
+# Scriptstart
+
+$Fenster=New-GUIWindow Tools
+
+###########################Buttons##############################
+
+New-GUIButton $Fenster "PCInfo" "PCInfo" 25 25 90 23 -action {pcinfo}
+  
+New-GUIButton $Fenster "NetUse IDR" "IDR verbinden" 150 250 75 50 -action {ConnectNetzLW}
+ 
+New-GUIButton $Fenster "isi" "isi" 25 125 90 23 -action {isi}
+ 
+New-GUIButton $Fenster "ie" "Sophos Konsole" 25 150 90 23 -action {ie}
+ 
+New-GUIButton $Fenster "Close" "Schließen" 150 275 75 23 -Action {$fenster.close()}
+ 
+New-GUIButton $Fenster "VNC" "VNC installieren" 376 200 145 23 -Action {vnc}
+ 
+New-GUIButton $Fenster "notepad" "Editor" 25 50 90 23 -Action {notepad}
+ 
+New-GUIButton $Fenster "TimeSetting" "Zeitserver" 25 225 90 23 -Action {TimeSetting}
+
+New-GUIButton $Fenster "Autologon" "Autologon" 25 275 90 23 -Action {Autologon}
+
+New-GUIButton $Fenster "RDP" "RDP aktiv?" 25 250 90 23 -Action {RDP}
+
+New-GUIButton $Fenster "DC32" "DeviceCleaner 32-Bit" 376 25 145 23 -Action {DC32}
+
+New-GUIButton $Fenster "DC64" "DeviceCleaner 64-Bit" 376 50 145 23 -Action {DC64}
+
+New-GUIButton $Fenster "SnapShot140" "SnapShot 1.40" 376 125 145 23 -Action {SS140}
+
+New-GUIButton $Fenster "SnapShot145_WOE" "SnapShot 1.45_WOE" 376 150 145 23 -Action {SS144}  #Hinterer Wert ist Anzeigewert
+
+New-GUIButton $Fenster "LUGImage" "LuG Image Test" 376 225 145 23 -Action {LUGImage}
+
+New-GUIButton $Fenster "cc32" "CCleaner x32" 550 25 145 23 -Action {cc32}
+
+New-GUIButton $Fenster "Szg" "Schnellzugriff entfernen" 550 50 145 23 -Action {szg}
+
+New-GUIButton $Fenster "hn" " Last Hostname" 550 125 145 23 -Action {hn}
+
+$CBox1 = New-Object System.Windows.Forms.Combobox
+$CBox1.Location = New-Object System.Drawing.Size(150,25)
+$CBox1.Size = New-Object System.Drawing.Size(200,23)
+$CBox1.Text = "Benutzer wählen"
+[void] $CBox1.Items.Add("EMEA\tknoblo")
+[void] $CBox1.Items.Add("EMEA\walteph")
+[void] $CBox1.Items.Add("EMEA\jmikote")
+[void] $CBox1.Items.Add("EMEA\leer")
+$Fenster.Controls.Add($CBox1)
+
+
+
+
+###Passwort Feld#######
+
+$PWText = New-Object System.Windows.Forms.MaskedTextBox
+$PWText.PasswordChar = 'Q'
+$PWText.Location = New-Object System.Drawing.Size (150, 50)
+$PWText.Size = New-Object System.Drawing.Size (200, 23)
+$PWText.Visible = $True
+$Fenster.Controls.Add($PWText) 
+
+
+
+##############Keypress#################################l
+$Fenster.KeyPreview = $True
+$Fenster.Add_KeyDown({if ($_.KeyCode -eq "Escape") {$fenster.close}})
+
+
+##############Anzeige des Fenster#######################
+Show-GUIWindow $Fenster | Out-Null
