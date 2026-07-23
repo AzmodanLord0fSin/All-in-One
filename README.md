@@ -11,8 +11,7 @@ einer Schaltfläche in einem WinForms-Fenster.
 ## Herkunft
 
 Die erste Fassung entstand 2023 im Helpdesk-Alltag und wurde beim Jobwechsel eingefroren —
-mit toten Funktionsaufrufen, handgezählten Pixelkoordinaten und einem Klartextpasswort in
-der Kommandozeile. 2026 überarbeitet: Logik von der Oberfläche getrennt, getestet, unter CI
+mit toten Funktionsaufrufen, handgezählten Pixelkoordinaten. 2026 überarbeitet: Logik von der Oberfläche getrennt, getestet, unter CI
 gestellt. Was der Umbau im Einzelnen geändert hat, steht in [CHANGELOG.md](CHANGELOG.md).
 
 ## Schnellstart
