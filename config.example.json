@@ -1,0 +1,31 @@
+{
+  "_hinweis": "Kopieren nach config.json und anpassen. config.json ist per .gitignore ausgeschlossen, damit lokale Pfade und Freigabenamen nicht im Repository landen. Leer gelassene Pfade deaktivieren die zugehoerige Schaltflaeche.",
+
+  "Window": {
+    "Title": "All-in-One — Toolbox",
+    "ButtonWidth": 170,
+    "ButtonHeight": 26,
+    "Margin": 14,
+    "Spacing": 4,
+    "HeaderHeight": 20,
+    "GroupGap": 12,
+    "MaxColumn": 340
+  },
+
+  "Paths": {
+    "CCleaner": "C:\\Program Files\\CCleaner\\CCleaner64.exe",
+    "DeviceCleanup": "\\\\server\\share\\tools\\DeviceCleanup.exe",
+    "SnapShot": "\\\\server\\share\\tools\\snapshot.exe",
+    "Vnc": "\\\\server\\share\\tools\\VNC-Setup.exe",
+    "TimeServerReg": "\\\\server\\share\\config\\zeitserver.reg"
+  },
+
+  "Network": {
+    "ShareUnc": "\\\\server\\abteilung",
+    "DriveLetter": "Y"
+  },
+
+  "Report": {
+    "OutputPath": ""
+  }
+}

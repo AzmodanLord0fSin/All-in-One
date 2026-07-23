@@ -1,0 +1,11 @@
+# Lokale Konfiguration: enthaelt Pfade, Servernamen und Freigaben.
+# Vorlage ist config.example.json.
+config.json
+
+# Erzeugte Berichte
+PC-Info_*.txt
+
+# Editor / OS
+.vscode/
+.DS_Store
+Thumbs.db

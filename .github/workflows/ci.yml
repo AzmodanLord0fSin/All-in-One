@@ -1,0 +1,88 @@
+name: CI
+
+on:
+  push:
+    branches: [main, modernize]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  lint:
+    name: PSScriptAnalyzer
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: PSScriptAnalyzer installieren
+        shell: pwsh
+        run: Install-Module PSScriptAnalyzer -Scope CurrentUser -Force -SkipPublisherCheck
+
+      - name: Analysieren
+        shell: pwsh
+        run: |
+          $findings = Invoke-ScriptAnalyzer -Path . -Recurse -Settings ./PSScriptAnalyzerSettings.psd1
+          if ($findings) {
+            $findings | Format-Table Severity, ScriptName, Line, RuleName, Message -AutoSize -Wrap
+            throw "$($findings.Count) Befund(e) — siehe oben."
+          }
+          Write-Output 'Keine Befunde.'
+
+  test:
+    name: Pester (${{ matrix.name }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Die Kernlogik ist plattformneutral — das wird hier auch belegt,
+          # nicht nur behauptet.
+          - { os: ubuntu-latest,  shell: pwsh,       name: 'PS 7 / Linux' }
+          - { os: macos-latest,   shell: pwsh,       name: 'PS 7 / macOS' }
+          - { os: windows-latest, shell: pwsh,       name: 'PS 7 / Windows' }
+          # Windows PowerShell 5.1 ist die Zielplattform der Oberflaeche.
+          - { os: windows-latest, shell: powershell, name: 'PS 5.1 / Windows' }
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Pester installieren
+        shell: ${{ matrix.shell }}
+        run: |
+          Set-PSRepository PSGallery -InstallationPolicy Trusted -ErrorAction SilentlyContinue
+          Install-Module Pester -MinimumVersion 5.0 -Scope CurrentUser -Force -SkipPublisherCheck
+
+      - name: Tests
+        shell: ${{ matrix.shell }}
+        run: |
+          Import-Module Pester -MinimumVersion 5.0
+          $config = New-PesterConfiguration
+          $config.Run.Path = './tests'
+          $config.Run.Exit = $true
+          $config.Output.Verbosity = 'Detailed'
+          Invoke-Pester -Configuration $config
+
+      - name: Anordnung ohne Oberflaeche pruefen
+        shell: ${{ matrix.shell }}
+        run: ./AllInOne.ps1 -WhatIfLayout
+
+  syntax:
+    name: Syntaxpruefung
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Alle Skripte parsen
+        shell: pwsh
+        run: |
+          $failed = $false
+          Get-ChildItem -Recurse -Include *.ps1, *.psm1 -File | ForEach-Object {
+            $errors = $null
+            [System.Management.Automation.Language.Parser]::ParseFile(
+              $_.FullName, [ref]$null, [ref]$errors) | Out-Null
+            if ($errors) {
+              $failed = $true
+              Write-Output "FEHLER in $($_.Name):"
+              $errors | ForEach-Object { "  Zeile $($_.Extent.StartLineNumber): $($_.Message)" }
+            }
+          }
+          if ($failed) { throw 'Syntaxfehler gefunden.' }
+          Write-Output 'Alle Skripte parsen fehlerfrei.'
